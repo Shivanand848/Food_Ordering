@@ -5,68 +5,119 @@ import { toast } from 'react-toastify';
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
-  useEffect(() => {
-    const carts = JSON.parse(localStorage.getItem('cart'));
-    setCart(carts || []);
-  }, []);
+  const navigate = useNavigate();
 
+ useEffect(() => {
+  const carts = JSON.parse(localStorage.getItem('cart')) || [];
+  const fixedCart = carts.map(item => ({
+    ...item,
+    quantity: Number(item.quantity) > 0 ? Number(item.quantity) : 1
+  }));
+  setCart(fixedCart);
+}, []);
 
-  const handleProceed = () => {
+  const updateCart = (updatedCart) => {
+    setCart(updatedCart);
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
-
-  const navigate=useNavigate()
 
   const handleRemoveItem = (index) => {
     const updatedCart = cart.filter((_, i) => i !== index);
-    setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    navigate('/')
-    toast.error('Food Removed')
+    updateCart(updatedCart);
+    toast.error('Item removed');
   };
 
+  const handleQuantityChange = (index, delta) => {
+    const updatedCart = [...cart];
+    const item = updatedCart[index];
+    item.quantity += delta;
+
+    if (item.quantity <= 0) {
+      handleRemoveItem(index);
+    } else {
+      updateCart(updatedCart);
+      toast.info('Quantity updated');
+    }
+  };
+
+  const handleProceed = () => {
+    toast.success('Proceeding to checkout...');
+    navigate('/checkout');
+  };
+
+  const grandTotal = cart.reduce((total, item) => total + Number(item.quantity) * 299, 0);
+
   return (
-    <div>
+    <>
       <Navbar />
-      <div>
-        {
-          cart.length > 0 ?
-            (
-              <>
-                <div className='shadow-lg p-4 container col-lg-8 mt-5'>
-                  <h1>Your Cart</h1>
-                  {
-                    cart.map((cartItem, index) => (
-                      <div key={index} className='d-flex flex-row justify-content-center align-items-center shadow-lg p-4'>
-                        <img src={cartItem.strMealThumb} style={{ width: "150px" }} alt="" />
-                        <div className='d-flex flex-grow-1 justify-content-center gap-5'>
-                          <h4>{cartItem.strMeal}</h4>
-                          <h4>&#8377; 299</h4>
-                        </div>
-                        <div>
-                          <button className='btn btn-danger' onClick={() => handleRemoveItem(index)}>
-                            <span className='bi bi-trash'></span>
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  }
-                  <div>
-                    <button className='btn btn-primary mt-4' onClick={handleProceed}>Proceed to CheckOut</button>
+      <div className="container py-5">
+        {cart.length > 0 ? (
+          <div className="cart-wrapper shadow-lg p-4 bg-white rounded-4">
+            <h2 className="text-center mb-4">🛒 Your Cart</h2>
+            <div className="row gy-4">
+              {cart.map((item, index) => (
+                <div
+                  key={index}
+                  className="col-12 d-flex flex-column flex-md-row align-items-center justify-content-between cart-item p-3 rounded-3 shadow-sm bg-light"
+                >
+                  <div className="d-flex align-items-center gap-3">
+                    <img
+                      src={item.strMealThumb}
+                      alt={item.strMeal}
+                      className="rounded"
+                      style={{ width: '100px', height: '80px', objectFit: 'cover' }}
+                      onError={(e) => (e.target.src = 'https://via.placeholder.com/100')}
+                    />
+                    <div>
+                      <h5 className="mb-1">{item.strMeal}</h5>
+                      <p className="mb-1 text-muted">₹299 × {(Number(item.quantity))}</p>
+                      <h6>Total: ₹{(Number(item.quantity) || 1) * 299
+}</h6>
+                    </div>
+                  </div>
+
+                  <div className="d-flex align-items-center gap-2 mt-3 mt-md-0">
+                    <button
+                      className="btn btn-outline-secondary"
+                      onClick={() => handleQuantityChange(index, -1)}
+                    >−</button>
+                    <span>{Number(item.quantity)}</span>
+                    <button
+                      className="btn btn-outline-secondary"
+                      onClick={() => handleQuantityChange(index, 1)}
+                    >+</button>
+
+                    <button
+                      className="btn btn-outline-danger ms-3"
+                      onClick={() => handleRemoveItem(index)}
+                    >
+                      <i className="bi bi-trash-fill"></i>
+                    </button>
                   </div>
                 </div>
-              </>
-            ) :
-            (
-              <>
-                <div className='text-center mt-5 shadow-lg col-4 container p-3 rounded-3'>
-                  <h1>Your Cart is Empty</h1>
-                  <span className='bi bi-cart-x-fill text-danger fs-1'></span>
-                </div>
-              </>
-            )
-        }
+              ))}
+            </div>
+
+            <div className="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-3">
+              <h4 className="m-0">Grand Total: ₹{grandTotal}</h4>
+              <button className="btn btn-success px-4" onClick={handleProceed}>
+                Proceed to Checkout
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center mt-5 p-4 shadow rounded-4 bg-light">
+            <h3>Your Cart is Empty</h3>
+            <i className="bi bi-cart-x text-danger" style={{ fontSize: '4rem' }}></i>
+            <div className="mt-4">
+              <button className="btn btn-warning px-4" onClick={() => navigate('/')}>
+                Browse Meals
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

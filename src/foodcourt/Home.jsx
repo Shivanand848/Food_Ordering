@@ -1,65 +1,110 @@
 import React, { useEffect, useState } from 'react'
 import SimpleSlider from './SimpleSlider'
-import Navbar from './Navbar';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import Navbar from './Navbar'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Home = () => {
-  const [apiData, setapiData] = useState([]);
-  const [filtter, setfiltter] = useState('indian')
-  const [search, setsearch] = useState()
-  const [cart, setCart] = useState([])
+  const [apiData, setapiData] = useState([])
+  const [filter, setFilter] = useState('indian')
+  const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const apifetch = async () => {
-    const Api = search ? (`https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`) : (`https://www.themealdb.com/api/json/v1/1/filter.php?a=${filtter}`);
-    const response = await fetch(Api)
-    const data = await response.json();
-    setapiData(data.meals || [])
+  const fetchMeals = async () => {
+    setLoading(true)
+    const apiURL = search
+      ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`
+      : `https://www.themealdb.com/api/json/v1/1/filter.php?a=${filter}`
+
+    try {
+      const response = await fetch(apiURL)
+      const data = await response.json()
+      setapiData(data.meals || [])
+    } catch (error) {
+      console.error('API error:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
-    apifetch()
-  }, [filtter, search])
+    fetchMeals()
+  }, [filter, search])
 
-  const addtocart = (fooditem) => {
-    const alreadyfood = JSON.parse(localStorage.getItem('cart'))||[]
-    const foods = [...alreadyfood, fooditem]
-    setCart(foods)
-    localStorage.setItem('cart', JSON.stringify(foods))
-    toast.success('Food Added')
-    navigate('/cart')
+  const addToCart = (meal) => {
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || []
+    const exists = existingCart.find(item => item.idMeal === meal.idMeal)
+
+    if (exists) {
+      toast.info('Item already in cart')
+    } else {
+      const updatedCart = [...existingCart, meal]
+      localStorage.setItem('cart', JSON.stringify(updatedCart))
+      toast.success('Item added to cart')
+    }
   }
+
+  const filters = ['indian', 'canadian', 'british', 'thai', 'chinese', 'russian']
+
   return (
     <>
-      <Navbar setsearch={setsearch} />
-      <div style={{ overflow: "hidden" }}>
+      <Navbar setsearch={setSearch} />
+      <div className="container-fluid p-0" style={{ overflowX: 'hidden' }}>
         <SimpleSlider />
 
-        <div className='d-flex justify-content-center gap-5 mt-5 flex-wrap ' >
-          <button className='btn btn-outline-warning' onClick={() => setfiltter('indian')}><span className='bi bi-filter'></span> Indian</button>
-          <button className='btn btn-outline-warning' onClick={() => setfiltter('canadian')}><span className='bi bi-filter'></span> Canadian</button>
-          <button className='btn btn-outline-warning' onClick={() => setfiltter('british')} ><span className='bi bi-filter'></span> British</button>
-          <button className='btn btn-outline-warning' onClick={() => setfiltter('thai')}><span className='bi bi-filter'></span> Thai</button>
-          <button className='btn btn-outline-warning' onClick={() => setfiltter('chinese')}><span className='bi bi-filter'></span> Chinese</button>
-          <button className='btn btn-outline-warning' onClick={() => setfiltter('russian')}><span className='bi bi-filter'></span> Russian</button>
+        
+        <div className="filter-bar d-flex justify-content-center flex-wrap gap-3 py-3 mt-4 ">
+          {filters.map((f) => (
+            <button
+              key={f}
+              className={`btn btn-${filter === f ? 'warning' : 'outline-warning'} text-capitalize`}
+              onClick={() => setFilter(f)}
+            >
+              <i className="bi bi-filter"></i> {f}
+            </button>
+          ))}
         </div>
 
-        <div className='d-flex justify-content-center flex-wrap gap-4 mt-5'>
-          {
-            apiData.map((fooditem, index) => (
-              <div key={fooditem.idMeal} className='card col-lg-3 col-md-5 col-sm-4 col-10 shadow-lg rounded-5 m-4 bg-transparent'>
-                <img src={fooditem.strMealThumb} className=' rounded- ' style={{ borderRadius: "50%" }} alt="" /> <div />
-                <div className='car-body p-3 d-flex flex-column align-items-center'>
-                  <h4>{fooditem.strMeal}</h4>
-                  <h5 style={{ fontFamily: "initial" }}>&#8377; 299</h5>
+        <div className="container mt-4">
+          {loading ? (
+            <div className="text-center">
+              <div className="spinner-border text-warning" role="status" />
+              <p className="mt-2">Loading meals...</p>
+            </div>
+          ) : apiData.length === 0 ? (
+            <p className="text-center fs-5">No meals found.</p>
+          ) : (
+            <div className="row g-4 justify-content-center">
+              {apiData.map(meal => (
+                <div
+                  key={meal.idMeal}
+                  className="col-6 col-sm-6 col-md-4 col-lg-3"
+                >
+                  <div className="card meal-card h-100 shadow-sm border-0">
+                    <img
+                      src={meal.strMealThumb}
+                      className="card-img-top meal-img"
+                      alt={meal.strMeal}
+                      style={{ objectFit: 'cover', height: '200px' }}
+                    />
+                    <div className="card-body text-center">
+                      <h5 className="card-title text-truncate">{meal.strMeal}</h5>
+                      <p className="price">₹299</p>
+                    </div>
+                    <div className="card-footer bg-transparent border-0">
+                      <button
+                        className="btn btn-warning w-100"
+                        onClick={() => addToCart(meal)}
+                      >
+                        <i className="bi bi-cart-plus"></i> Add to Cart
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className='card-footer'>
-                  <button className='btn btn-warning w-100' onClick={() => addtocart(fooditem)}><span className='bi bi-cart-plus' ></span> Add To Cart</button>
-                </div>
-              </div>
-            ))
-          }
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>
