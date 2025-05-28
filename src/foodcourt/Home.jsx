@@ -107,6 +107,71 @@ const Home = () => {
           )}
         </div>
       </div>
+
+
+       <footer class="shadow-lg bg-white pt-4 text-dark" style={{marginTop:"10%"}}>
+        <div class="container text-md-start text-center">
+            <div class="row">
+                <div class="col-md-3 col-lg-3 col-xl-3 mb-4 mx-auto ">
+                    <h4 class="fw-bold">ECOM</h4>
+                    <ul class="list-unstyled">
+                        <li><span class="bi bi-geo-alt"></span> 123 Main St, Anytown, USA 12345</li>
+                        <li><span class="bi bi-telephone"></span>7408345650</li>
+                        <li><span class="bi bi-envelope-at"></span> Email:
+                            <a href="abhishek@gmail.com">abhishek@gmail.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mx-auto col-md-2  mb-4">
+                    <h4 class="fw-bold">Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li class="nav-item"><a href="" class="nav-link fs-5 textdec">Home</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">Services</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">About Us</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">Contact</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">Query</a></li>
+                    </ul>
+                </div>
+
+
+                <div class="mx-auto col-md-2  mb-4">
+                    <h4 class="fw-bold">Customer Services</h4>
+                    <ul class="list-unstyled">
+                        <li class="nav-item"><a href="" class="nav-link fs-5 textdec">Return</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">Refund</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">Cashback</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">Discount</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">Sale</a></li>
+                    </ul>
+                </div>
+
+                <div class="mx-auto col-md-2  mb-4">
+                    <h4 class="fw-bold">Our Menu</h4>
+                    <ul class="list-unstyled">
+                        <li class="nav-item"><a href="" class="nav-link fs-5 textdec">Breakfast</a></li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5"></a>Lunch</li>
+                        <li class="nav-item"><a href="" class="nav-link fs-5">Dinner</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <ul class="list-unstyled d-flex gap-3 justify-content-center">
+                    <li><span class="bi bi-facebook"></span></li>
+                    <li><span class="bi bi-instagram"></span></li>
+                    <li><span class="bi bi-twitter"></span></li>
+                    <li><span class="bi bi-whatsapp"></span></li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="row-cols-md-12">
+                    <p class="text-center">&copy; 2025 Example Company. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
     </>
   )
 }
