@@ -16,22 +16,22 @@ const Login = () => {
     e.preventDefault();
     login(email,password)
 
-    // if (!email || !password) {
-    //   toast.error('Please fill in both email and password');
-    //   return;
-    // }
+    if (!email || !password) {
+      toast.error('Please fill in both email and password');
+      return;
+    }
 
-    // const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user'));
 
-    // if (user && user.email === email && user.password === password) {
-    //   localStorage.setItem('loggedInUser', JSON.stringify(user));
-    //   toast.success('Successfully Logged In',{position:"top-center"});
-    //   setEmail('');
-    //   setPassword('');
-    //   navigate('/');
-    // } else {
-    //   toast.error('Invalid email or password');
-    // }
+    if (user && user.email === email && user.password === password) {
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      toast.success('Successfully Logged In',{position:"top-center"});
+      setEmail('');
+      setPassword('');
+      navigate('/');
+    } else {
+      toast.error('Invalid email or password');
+    }
   };
 
   return (
