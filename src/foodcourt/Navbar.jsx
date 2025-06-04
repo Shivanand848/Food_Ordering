@@ -12,12 +12,12 @@ const Navbar = ({ setsearch }) => {
 
 
 
-    useEffect(() => {
-        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        if (loggedInUser) {
-            setUser(loggedInUser);
-        }
-    }, [user]);
+    // useEffect(() => {
+    //     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    //     if (loggedInUser) {
+    //         setUser(loggedInUser);
+    //     }
+    // }, [user]);
 
     useEffect(() => {
         const cartCounts = JSON.parse(localStorage.getItem('cart')) || []

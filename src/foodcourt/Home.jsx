@@ -158,10 +158,10 @@ const Home = () => {
 
             <div class="row mt-2">
                 <ul class="list-unstyled d-flex gap-3 justify-content-center">
-                    <li><span class="bi bi-facebook"></span></li>
-                    <li><span class="bi bi-instagram"></span></li>
-                    <li><span class="bi bi-twitter"></span></li>
-                    <li><span class="bi bi-whatsapp"></span></li>
+                    <li><span class="bi bi-facebook">FB</span></li>
+                    <li><span class="bi bi-instagram">IN</span></li>
+                    <li><span class="bi bi-twitter">TW</span></li>
+                    <li><span class="bi bi-whatsapp">WH</span></li>
                 </ul>
             </div>
 
