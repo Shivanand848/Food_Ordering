@@ -112,7 +112,7 @@ const Cart = () => {
                 <span className="text-muted">Grand Total:</span>{' '}
                 <span className="text-success">₹{grandTotal}</span>
               </h4>
-              <button className="btn btn-success btn-lg px-4 shadow" onClick={handleProceed}>
+              <button className="btn btn-success btn-lg px-4 shadow" onClick={() => navigate ('/proceedtocheckout')}>
                 Proceed to Checkout
               </button>
             </div>

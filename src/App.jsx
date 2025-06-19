@@ -9,6 +9,7 @@ import Navbar from './foodcourt/Navbar';
 import Cart from './foodcourt/Cart';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRouting from './Context/ProtectedRouting';
+import ProceedToCheckOut from './foodcourt/ProceedToCheckOut';
 const App = () => {
   return (
     <div>
@@ -20,6 +21,7 @@ const App = () => {
         <Route path='/login' element={<ProtectedRouting><Login/></ProtectedRouting>}/>
         <Route path='/register' element={<ProtectedRouting><Register/></ProtectedRouting>}/>
         <Route path='/cart' element={<Cart/>}/>
+        <Route path='/proceedtocheckout' element={<ProceedToCheckOut/>}/>
       </Routes>
       <ToastContainer/>
       </BrowserRouter>
