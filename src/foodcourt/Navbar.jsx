@@ -31,7 +31,7 @@ const Navbar = ({ setsearch }) => {
     }
     return (
         <>
-            <nav className='navbar navbar-expand-lg bg-warning  position-sticky top-0 z-2' >
+            <nav className='navbar navbar-expand-lg bg-warning  position-sticky top-0 z-3' >
                 <div className='container-fluid'>
                     <Link to="#" className='navbar-brand text-white fw-bold fs-3'><span className='bi bi-egg-fried'></span> FOOD COURT</Link>
 

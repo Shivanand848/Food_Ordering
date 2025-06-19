@@ -1,5 +1,5 @@
-import { Box, Button, TextField } from '@mui/material';
 import React, { useContext, useState } from 'react';
+import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
@@ -10,71 +10,76 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const{user,login}=useContext(AuthContext)
+  const { login } = useContext(AuthContext);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    login(email,password)
 
-    // if (!email || !password) {
-    //   toast.error('Please fill in both email and password');
-    //   return;
-    // }
+    if (!email || !password) {
+      toast.error('Please fill in both email and password');
+      return;
+    }
 
-    // const user = JSON.parse(localStorage.getItem('user'));
-
-    // if (user && user.email === email && user.password === password) {
-    //   localStorage.setItem('loggedInUser', JSON.stringify(user));
-    //   toast.success('Successfully Logged In',{position:"top-center"});
-    //   setEmail('');
-    //   setPassword('');
-    //   navigate('/');
-    // } else {
-    //   toast.error('Invalid email or password');
-    // }
+    try {
+      await login(email, password);
+      toast.success('Successfully Logged In!', { position: 'top-center' });
+      setEmail('');
+      setPassword('');
+      navigate('/');
+    } catch (error) {
+      toast.error(error.message || 'Invalid email or password');
+    }
   };
 
   return (
     <>
-    <Navbar/>
+      <Navbar />
+      <ToastContainer />
       <Box
+        component={Paper}
+        elevation={6}
         sx={{
-          boxShadow: 10,
-          maxWidth: 650,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          maxWidth: 450,
           mx: 'auto',
-          flexDirection: 'column',
-          p: 5,
-          mt: 11,
-          borderRadius: 5
+          mt: 10,
+          p: 4,
+          borderRadius: 3,
+          textAlign: 'center',
+          backgroundColor: '#fafafa',
         }}
       >
-        <h2 style={{ color: 'black', textDecoration: 'underline' }}>Login</h2>
+        <Typography variant="h4" fontWeight="bold" mb={3} color="primary">
+          Login
+        </Typography>
+
         <form onSubmit={handleLogin}>
           <TextField
             label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             margin="normal"
-            variant="standard"
+            variant="outlined"
             fullWidth
+            required
+            type="email"
+            autoComplete="email"
           />
-          
+
           <TextField
             label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            variant="standard"
+            variant="outlined"
             margin="normal"
             fullWidth
+            required
             type="password"
+            autoComplete="current-password"
           />
 
           <Button
             variant="contained"
-            sx={{ mt: 2 }}
+            sx={{ mt: 3, py: 1.5, fontWeight: 'bold' }}
             fullWidth
             type="submit"
           >
